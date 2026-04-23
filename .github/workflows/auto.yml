@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repo
@@ -24,13 +26,12 @@ jobs:
       - name: Run scraper
         run: node index.js
 
-      - name: Commit files
+      - name: Commit and push files
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .
           git commit -m "Auto update playlist" || echo "No changes"
-          git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git --force
+          git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
